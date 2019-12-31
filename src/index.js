@@ -1,12 +1,32 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React,{useState} from 'react';
+import ReactDOM from 'react-dom'
 import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import ToDoForm from './ToDoForm';
+import { Typography } from '@material-ui/core';
+import ToDoList from './ToDoList';
 
+const App = () => {
+    const [todos,settodos] = useState([]);
+    return (
+        <div className="App">
+            <Typography component="h1" variant="h2">
+                ToDos
+            </Typography>
+
+            <ToDoForm savetodo={(todoText) => {
+                const trimmedText = todoText.trim();
+
+                if(trimmedText.length > 0){
+                    settodos([...todos,trimmedText]);
+                }
+            }}/>
+            <ToDoList todos={todos}
+                      deletetodos = {(todoindex) => {
+                          const newTodos = todos.filter((_,index) => index !== todoindex);
+                          settodos(newTodos);
+                      }}  
+            />
+        </div>
+    );
+}
 ReactDOM.render(<App />, document.getElementById('root'));
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
